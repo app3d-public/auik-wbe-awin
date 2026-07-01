@@ -6,16 +6,6 @@
 namespace auik
 {
 #ifdef _WIN32
-    static CustomTitlebarPadding resolve_custom_titlebar_padding(const awin::Window &window)
-    {
-        const awin::WindowFlags flags = awin::get_window_flags(window);
-        if (flags & awin::WindowFlagBits::decorated) return {};
-        if (flags & awin::WindowFlagBits::fullscreen) return {};
-        if (flags & awin::WindowFlagBits::maximized) return {};
-        if (!(flags & awin::WindowFlagBits::extended_nc_area)) return {};
-        return {};
-    }
-
     static HICON resolve_window_icon(HWND hwnd)
     {
         HICON icon = reinterpret_cast<HICON>(SendMessageW(hwnd, WM_GETICON, ICON_SMALL2, 0));
@@ -245,9 +235,6 @@ namespace auik
         auto &global_ctx = detail::get_context();
         bind_window_events(awin_ctx->window, awin_ctx->event_dispatcher, awin_ctx);
         window_ctx->host_state = resolve_host_window_state(awin_ctx->window);
-#ifdef _WIN32
-        awin_ctx->custom_titlebar_padding = get_custom_titlebar_padding(awin_ctx->window);
-#endif
         auto dimensions = awin_ctx->initial_display_size;
         if (dimensions.x <= 0 || dimensions.y <= 0) dimensions = awin_ctx->window.dimensions();
         global_ctx.io.display_size.x = dimensions.x;
@@ -271,31 +258,5 @@ namespace auik
         ctx->get_window_icon_image = &get_window_icon_image;
 #endif
         return ctx;
-    }
-
-    AUIK_WBE_AWIN_EXPORT bool is_custom_titlebar_supported(const awin::Window &)
-    {
-#ifdef _WIN32
-        return true;
-#else
-        return false;
-#endif
-    }
-
-    CustomTitlebarPadding get_custom_titlebar_padding()
-    {
-        auto *window_ctx = detail::get_context().window_ctx;
-        auto *backend = static_cast<detail::AwinBackend *>(window_ctx);
-        if (!backend) return {};
-        return backend->custom_titlebar_padding;
-    }
-
-    CustomTitlebarPadding get_custom_titlebar_padding(const awin::Window &window)
-    {
-#ifdef _WIN32
-        return resolve_custom_titlebar_padding(window);
-#else
-        return {};
-#endif
     }
 } // namespace auik
