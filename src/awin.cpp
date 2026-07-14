@@ -5,6 +5,22 @@
 
 namespace auik
 {
+    static MouseKey resolve_mouse_key(awin::io::MouseKey key)
+    {
+        switch (key)
+        {
+        case awin::io::MouseKey::left:
+            return MouseKey::left;
+        case awin::io::MouseKey::right:
+            return MouseKey::right;
+        case awin::io::MouseKey::middle:
+            return MouseKey::middle;
+        case awin::io::MouseKey::unknown:
+        default:
+            return MouseKey::unknown;
+        }
+    }
+
 #ifdef _WIN32
     static HICON resolve_window_icon(HWND hwnd)
     {
@@ -218,7 +234,7 @@ namespace auik
         });
         ed.bind_event(backend, awin::event_id::mouse_click, [&window](const awin::MouseClickEvent &event) {
             if (event.window != &window) return;
-            detail::on_mouse_click_event(static_cast<MouseKey>(event.button), static_cast<KeyPressState>(event.action));
+            detail::on_mouse_click_event(resolve_mouse_key(event.button), static_cast<KeyPressState>(event.action));
         });
     }
 
