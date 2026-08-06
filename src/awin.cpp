@@ -200,7 +200,7 @@ namespace auik
                 return;
             }
             resume_delayed_tasks(ctx.window_ctx->time);
-            detail::mark_host_refresh_request();
+            mark_host_refresh_request();
         });
         ed.bind_event(backend, awin::event_id::char_input, [&window](const awin::CharInputEvent &e) {
             if (e.window != &window) return;
@@ -229,7 +229,7 @@ namespace auik
             const HostWindowState prev_state = ctx.window_ctx->host_state;
             if (prev_state == next_state) return;
             ctx.window_ctx->host_state = next_state;
-            detail::mark_host_refresh_request();
+            mark_host_refresh_request();
             detail::mark_layout_dirty();
         });
         ed.bind_event(backend, awin::event_id::mouse_click, [&window](const awin::MouseClickEvent &event) {
