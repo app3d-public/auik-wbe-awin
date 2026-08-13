@@ -1,7 +1,8 @@
 #include <auik/auik.hpp>
-#include <auik/wbe/awin/awin.hpp>
 #include <auik/detail/context.hpp>
+#include <auik/wbe/awin/awin.hpp>
 #include <awin/native_access.hpp>
+
 
 namespace auik
 {
@@ -9,15 +10,15 @@ namespace auik
     {
         switch (key)
         {
-        case awin::io::MouseKey::left:
-            return MouseKey::left;
-        case awin::io::MouseKey::right:
-            return MouseKey::right;
-        case awin::io::MouseKey::middle:
-            return MouseKey::middle;
-        case awin::io::MouseKey::unknown:
-        default:
-            return MouseKey::unknown;
+            case awin::io::MouseKey::left:
+                return MouseKey::left;
+            case awin::io::MouseKey::right:
+                return MouseKey::right;
+            case awin::io::MouseKey::middle:
+                return MouseKey::middle;
+            case awin::io::MouseKey::unknown:
+            default:
+                return MouseKey::unknown;
         }
     }
 
@@ -139,6 +140,15 @@ namespace auik
         window.set_cursor(backend->cursors + id);
     }
 
+    static amal::vec2 set_unbounded_mouse_drag(bool enabled, detail::WindowContext *window_ctx)
+    {
+        auto &window = static_cast<detail::AwinBackend *>(window_ctx)->window;
+        if (enabled) window.hide_cursor();
+        else window.show_cursor();
+        const auto pos = window.cursor_position();
+        return {static_cast<f32>(pos.x), static_cast<f32>(pos.y)};
+    }
+
     static acul::string get_clipboard_string(detail::WindowContext *window_ctx)
     {
         auto *backend = static_cast<detail::AwinBackend *>(window_ctx);
@@ -178,8 +188,8 @@ namespace auik
         ed.bind_event(backend, awin::event_id::mouse_move, [&window](const awin::PosEvent &event) {
             if (event.window != &window) return;
             auto &ctx = detail::get_context();
-            ctx.io.mouse_pos = {event.position.x, event.position.y};
             if (ctx.raw_mouse_mode) return;
+            ctx.io.mouse_pos = {event.position.x, event.position.y};
             auto *pending_filter = ctx.pending_filter;
             if (pending_filter && !pending_filter->allow()) pending_filter->set(PendingMaskBits::mouse_move);
             detail::on_mouse_move({0.0f, 0.0f});
@@ -258,12 +268,13 @@ namespace auik
     }
 
     AUIK_WBE_AWIN_EXPORT detail::WindowContext *create_awin_backend(awin::Window &window,
-                                                           acul::events::dispatcher &event_dispatcher,
-                                                           acul::point2D<i32> initial_display_size)
+                                                                    acul::events::dispatcher &event_dispatcher,
+                                                                    acul::point2D<i32> initial_display_size)
     {
         detail::AwinBackend *ctx = acul::alloc<detail::AwinBackend>(window, event_dispatcher, initial_display_size);
         ctx->get_window_handle = &get_window_handle;
         ctx->set_cursor = &set_window_cursor;
+        ctx->set_unbounded_mouse_drag = &set_unbounded_mouse_drag;
         ctx->get_clipboard_string = &get_clipboard_string;
         ctx->set_clipboard_string = &set_clipboard_string;
         ctx->update_time = &window_new_frame;
