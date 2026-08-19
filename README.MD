@@ -1,6 +1,6 @@
 # Auik Awin Window Backend
 
-`auik-wbe-awin` is the Awin window backend for [Auik](https://repos.homedatasrv.ru/app3d/auik).
+`auik-wbe-awin` is the Awin window backend for [Auik](https://repos.wusikijeronii.me/app3d/auik).
 It connects Auik host-window services to an Awin window.
 
 ## Building
@@ -27,9 +27,9 @@ Pass it to Auik through `auik::CreateInfo::set_window_backend()`.
 
 ## Dependencies
 
-- [auik](https://repos.homedatasrv.ru/app3d/auik)
-- [awin](https://repos.homedatasrv.ru/app3d/awin)
-- [acul](https://repos.homedatasrv.ru/app3d/acul)
+- [auik](https://repos.wusikijeronii.me/app3d/auik)
+- [awin](https://repos.wusikijeronii.me/app3d/awin)
+- [acul](https://repos.wusikijeronii.me/app3d/acul)
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
