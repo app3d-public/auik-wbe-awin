@@ -3,7 +3,6 @@
 #include <auik/wbe/awin/awin.hpp>
 #include <awin/native_access.hpp>
 
-
 namespace auik
 {
     static MouseKey resolve_mouse_key(awin::io::MouseKey key)
@@ -269,7 +268,7 @@ namespace auik
 
     AUIK_WBE_AWIN_EXPORT detail::WindowContext *create_awin_backend(awin::Window &window,
                                                                     acul::events::dispatcher &event_dispatcher,
-                                                                    acul::point2D<i32> initial_display_size)
+                                                                    acul::ipoint32 initial_display_size)
     {
         detail::AwinBackend *ctx = acul::alloc<detail::AwinBackend>(window, event_dispatcher, initial_display_size);
         ctx->get_window_handle = &get_window_handle;

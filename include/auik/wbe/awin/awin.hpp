@@ -16,10 +16,10 @@ namespace auik
             awin::Window &window;
             acul::events::dispatcher &event_dispatcher;
             awin::Cursor cursors[detail::CursorID::max];
-            acul::point2D<i32> initial_display_size{};
+            acul::ipoint32 initial_display_size{};
 
             AwinBackend(awin::Window &window, acul::events::dispatcher &event_dispatcher,
-                        acul::point2D<i32> initial_display_size = {})
+                        acul::ipoint32 initial_display_size = {})
                 : window(window), event_dispatcher(event_dispatcher), initial_display_size(initial_display_size)
             {
             }
@@ -28,6 +28,6 @@ namespace auik
 
     AUIK_WBE_AWIN_EXPORT detail::WindowContext *create_awin_backend(awin::Window &window,
                                                                     acul::events::dispatcher &event_dispatcher,
-                                                                    acul::point2D<i32> initial_display_size = {});
+                                                                    acul::ipoint32 initial_display_size = {});
 
 } // namespace auik
