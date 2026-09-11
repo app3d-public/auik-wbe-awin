@@ -124,10 +124,11 @@ namespace auik
 #ifdef _WIN32
         return awin::native_access::get_hwnd(backend->window);
 #else
-        int backend = native_access::get_backend_type();
-        if (backend == AWIN_BACKEND_X11) return awin::native_access::get_x11_window_handle(backend->window);
-        else if (backend == AWIN_BACKEND_WAYLAND)
-            return awin::native_access::get_wayland_window_handle(backend->window);
+        const int backend_type = awin::native_access::get_backend_type();
+        if (backend_type == AWIN_BACKEND_X11)
+            return reinterpret_cast<void *>(awin::native_access::get_x11_window_handle(backend->window));
+        else if (backend_type == AWIN_BACKEND_WAYLAND)
+            return awin::native_access::get_wayland_surface(backend->window);
         else return nullptr;
 #endif
     }
@@ -179,6 +180,7 @@ namespace auik
                 auto &ctx = detail::get_context();
                 const HostWindowState next_state = resolve_host_window_state(window);
                 if (ctx.window_ctx->host_state != next_state) ctx.window_ctx->host_state = next_state;
+                if (next_state == HostWindowState::minimized) return;
                 if (event.position.x <= 0 || event.position.y <= 0) return;
                 ctx.io.display_size = {event.position.x, event.position.y};
                 detail::mark_layout_dirty();
