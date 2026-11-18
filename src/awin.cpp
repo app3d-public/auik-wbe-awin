@@ -255,6 +255,7 @@ namespace auik
         auto *cursors = awin_ctx->cursors;
         cursors[detail::CursorID::arrow] = awin::Cursor::create(awin::Cursor::Type::arrow);
         cursors[detail::CursorID::ibeam] = awin::Cursor::create(awin::Cursor::Type::ibeam);
+        cursors[detail::CursorID::hand] = awin::Cursor::create(awin::Cursor::Type::hand);
         cursors[detail::CursorID::resize_ew] = awin::Cursor::create(awin::Cursor::Type::resize_ew);
         cursors[detail::CursorID::resize_ns] = awin::Cursor::create(awin::Cursor::Type::resize_ns);
         cursors[detail::CursorID::resize_nwse] = awin::Cursor::create(awin::Cursor::Type::resize_nwse);
